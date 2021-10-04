@@ -55,6 +55,7 @@ var (
 func init() {
 	Token = goDotEnvVariable("BOT_TOKEN")
 	Port = os.Getenv("PORT")
+	fmt.Println(Port)
 
 }
 
