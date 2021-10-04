@@ -1,1 +1,1 @@
-web: main
+worker: go run main.go -p $PORT
