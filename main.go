@@ -49,6 +49,31 @@ const (
 
 func main() {
 	http.HandleFunc("/", homePage)
+	Token := goDotEnvVariable("BOT_TOKEN")
+	sess, err := discordgo.New("Bot " + Token)
+	if err != nil {
+		fmt.Println("error creating Discord session,", err)
+		return
+	}
+
+	sess.AddHandler(messageCreate)
+
+	sess.Identify.Intents = discordgo.IntentsGuildMessages
+
+	err = sess.Open()
+	if err != nil {
+		fmt.Println("error opening connection,", err)
+		return
+	}
+
+	// Wait here until CTRL-C or other term signal is received.
+	fmt.Println("Bot is now running. Press CTRL-C to exit.")
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	<-sc
+
+	// Cleanly close down the Discord session.
+	sess.Close()
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -304,29 +329,4 @@ func homePage(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	fmt.Println(res, "The homepage.")
-	Token := goDotEnvVariable("BOT_TOKEN")
-	sess, err := discordgo.New("Bot " + Token)
-	if err != nil {
-		fmt.Println("error creating Discord session,", err)
-		return
-	}
-
-	sess.AddHandler(messageCreate)
-
-	sess.Identify.Intents = discordgo.IntentsGuildMessages
-
-	err = sess.Open()
-	if err != nil {
-		fmt.Println("error opening connection,", err)
-		return
-	}
-
-	// Wait here until CTRL-C or other term signal is received.
-	fmt.Println("Bot is now running. Press CTRL-C to exit.")
-	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
-	<-sc
-
-	// Cleanly close down the Discord session.
-	sess.Close()
 }
