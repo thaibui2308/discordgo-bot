@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net"
@@ -54,11 +55,14 @@ var (
 
 func init() {
 	Token = goDotEnvVariable("BOT_TOKEN")
-	Port = goDotEnvVariable("PORT")
+	flag.StringVar(&Port, "p", "", "TCP Port")
+	flag.Parse()
+
 }
 
 func main() {
 	ln, err := net.Listen("tcp", Port)
+	ln.Addr()
 	if err != nil {
 		fmt.Println("Error listening:", err.Error())
 		os.Exit(1)
