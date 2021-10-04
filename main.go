@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"strconv"
@@ -48,7 +47,7 @@ const (
 )
 
 func main() {
-	http.HandleFunc("/", homePage)
+
 	Token := goDotEnvVariable("BOT_TOKEN")
 	sess, err := discordgo.New("Bot " + Token)
 	if err != nil {
@@ -321,12 +320,4 @@ func goDotEnvVariable(key string) string {
 	}
 
 	return os.Getenv(key)
-}
-
-func homePage(res http.ResponseWriter, req *http.Request) {
-	if req.URL.Path != "/" {
-		http.NotFound(res, req)
-		return
-	}
-	fmt.Println(res, "The homepage.")
 }
