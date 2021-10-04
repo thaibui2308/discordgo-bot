@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/signal"
 	"strconv"
 	"strings"
+	"syscall"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
@@ -63,9 +65,13 @@ func main() {
 	}
 
 	// Wait here until CTRL-C or other term signal is received.
+	fmt.Println("Bot is now running. Press CTRL-C to exit.")
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	<-sc
 
 	// Cleanly close down the Discord session.
-	defer sess.Close()
+	sess.Close()
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
