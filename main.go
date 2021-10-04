@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/signal"
 	"strconv"
 	"strings"
-	"syscall"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
@@ -53,26 +51,21 @@ func main() {
 		fmt.Println("error creating Discord session,", err)
 		return
 	}
-	for true {
-		sess.AddHandler(messageCreate)
 
-		sess.Identify.Intents = discordgo.IntentsGuildMessages
+	sess.AddHandler(messageCreate)
 
-		err = sess.Open()
-		if err != nil {
-			fmt.Println("error opening connection,", err)
-			return
-		}
+	sess.Identify.Intents = discordgo.IntentsGuildMessages
+
+	err = sess.Open()
+	if err != nil {
+		fmt.Println("error opening connection,", err)
+		return
 	}
 
 	// Wait here until CTRL-C or other term signal is received.
-	fmt.Println("Bot is now running. Press CTRL-C to exit.")
-	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
-	<-sc
 
 	// Cleanly close down the Discord session.
-	sess.Close()
+	defer sess.Close()
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
