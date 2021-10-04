@@ -1,1 +1,1 @@
-worker: go run main.go -p $PORT
+web: PORT = $PORT
