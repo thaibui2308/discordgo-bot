@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"os/signal"
 	"strconv"
@@ -46,9 +47,34 @@ const (
 		"__ex__: ***crft finalize 894069231174443028***"
 )
 
+var (
+	Port  string
+	Token string
+)
+
+func init() {
+	Token = goDotEnvVariable("BOT_TOKEN")
+	Port = goDotEnvVariable("PORT")
+}
+
 func main() {
-	// currently not working
-	Token := goDotEnvVariable("BOT_TOKEN")
+	ln, err := net.Listen("tcp", Port)
+	if err != nil {
+		fmt.Println("Error listening:", err.Error())
+		os.Exit(1)
+	}
+	for {
+		conn, err := ln.Accept()
+		if err != nil {
+			fmt.Println("Error accepting: ", err.Error())
+			os.Exit(1)
+		}
+		go handleConnection(conn)
+	}
+
+}
+
+func handleConnection(conn net.Conn) {
 	sess, err := discordgo.New("Bot " + Token)
 	if err != nil {
 		fmt.Println("error creating Discord session,", err)
@@ -73,6 +99,7 @@ func main() {
 
 	// Cleanly close down the Discord session.
 	sess.Close()
+	conn.Close()
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
