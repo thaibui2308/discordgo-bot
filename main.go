@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"net"
@@ -55,8 +54,7 @@ var (
 
 func init() {
 	Token = goDotEnvVariable("BOT_TOKEN")
-	flag.StringVar(&Port, "p", "", "TCP Port")
-	flag.Parse()
+	Port = os.Getenv("PORT")
 
 }
 
