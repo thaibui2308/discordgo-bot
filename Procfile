@@ -1,1 +1,1 @@
-web: PORT = $PORT ./target/release/app
+web: go run main.go -p $PORT
