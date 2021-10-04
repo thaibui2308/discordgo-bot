@@ -1,1 +1,1 @@
-web: PORT = $PORT
+web: PORT = $PORT ./target/release/app
