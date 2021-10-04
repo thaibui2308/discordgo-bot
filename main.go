@@ -53,15 +53,16 @@ func main() {
 		fmt.Println("error creating Discord session,", err)
 		return
 	}
+	for true {
+		sess.AddHandler(messageCreate)
 
-	sess.AddHandler(messageCreate)
+		sess.Identify.Intents = discordgo.IntentsGuildMessages
 
-	sess.Identify.Intents = discordgo.IntentsGuildMessages
-
-	err = sess.Open()
-	if err != nil {
-		fmt.Println("error opening connection,", err)
-		return
+		err = sess.Open()
+		if err != nil {
+			fmt.Println("error opening connection,", err)
+			return
+		}
 	}
 
 	// Wait here until CTRL-C or other term signal is received.
