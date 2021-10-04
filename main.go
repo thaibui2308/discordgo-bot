@@ -47,7 +47,7 @@ const (
 )
 
 func main() {
-
+	// currently not working
 	Token := goDotEnvVariable("BOT_TOKEN")
 	sess, err := discordgo.New("Bot " + Token)
 	if err != nil {
