@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"strconv"
@@ -10,7 +9,6 @@ import (
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/joho/godotenv"
 )
 
 const (
@@ -51,7 +49,7 @@ var (
 )
 
 func init() {
-	Token = goDotEnvVariable("BOT_TOKEN")
+	Token = os.Getenv("TOKEN")
 
 }
 
@@ -314,16 +312,4 @@ func curateUserList(s *discordgo.Session, channelId, messageId, emoji string) []
 		return nil
 	}
 	return list
-}
-
-func goDotEnvVariable(key string) string {
-
-	// load .env file
-	err := godotenv.Load(".env")
-
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-
-	return os.Getenv(key)
 }
