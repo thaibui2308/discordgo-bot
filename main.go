@@ -80,51 +80,7 @@ func main() {
 
 	// Cleanly close down the Discord session.
 	sess.Close()
-	// ln, err := net.Listen("tcp", Port)
-	// ln.Addr()
-	// if err != nil {
-	// 	fmt.Println("Error listening:", err.Error())
-	// 	os.Exit(1)
-	// }
-	// for {
-	// 	conn, err := ln.Accept()
-	// 	if err != nil {
-	// 		fmt.Println("Error accepting: ", err.Error())
-	// 		os.Exit(1)
-	// 	}
-	// 	go handleConnection(conn)
-	// }
-
 }
-
-// func handleConnection(conn net.Conn) {
-// 	sess, err := discordgo.New("Bot " + Token)
-// 	if err != nil {
-// 		fmt.Println("error creating Discord session,", err)
-// 		return
-// 	}
-
-// 	sess.AddHandler(messageCreate)
-
-// 	sess.Identify.Intents = discordgo.IntentsGuildMessages
-
-// 	err = sess.Open()
-// 	if err != nil {
-// 		fmt.Println("error opening connection,", err)
-// 		return
-// 	}
-
-// 	// Wait here until CTRL-C or other term signal is received.
-// 	fmt.Println("Bot is now running. Press CTRL-C to exit.")
-// 	sc := make(chan os.Signal, 1)
-// 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
-// 	<-sc
-
-// 	// Cleanly close down the Discord session.
-// 	sess.Close()
-// 	conn.Close()
-// }
-
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
